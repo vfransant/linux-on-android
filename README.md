@@ -13,10 +13,10 @@ Automatized script to install ubuntu on your android device, no root needed.
 Using `curl`
 
 ```
-curl -O https://raw.githubusercontent.com/vfransant/linux-on-android/refs/heads/main/ubuntu-24_04-instalation.sh && bash install-ubuntu.sh
+curl -O https://raw.githubusercontent.com/vfransant/linux-on-android/refs/heads/main/ubuntu-24_04-instalation.sh && bash ubuntu-24_04-instalation.sh
 ```
 
 Using `wget`
 ```
-wget https://raw.githubusercontent.com/vfransant/linux-on-android/refs/heads/main/ubuntu-24_04-instalation.sh && bash install-ubuntu.sh
+wget https://raw.githubusercontent.com/vfransant/linux-on-android/refs/heads/main/ubuntu-24_04-instalation.sh && bash ubuntu-24_04-instalation.sh
 ```
