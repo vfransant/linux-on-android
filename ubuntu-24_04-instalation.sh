@@ -4,7 +4,7 @@
 pkg update
 
 # Installing updates
-echo "y" | pkg upgrade -y
+pkg upgrade -y
 
 # Setting up Termux access to Android storage (downloads, photos, etc.)
 termux-setup-storage
