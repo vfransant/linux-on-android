@@ -9,14 +9,14 @@ termux-change-repo
 pkg update
 
 # Installing updates
-pkg upgrade -y
+pkg upgrade
 
 # Setting up Termux access to Android storage (downloads, photos, etc.)
 termux-setup-storage
 
 # Download and run the wget-proot.sh script to install the distro
 curl https://raw.githubusercontent.com/23xvx/Termux-Proot-Custom-Installer/main/wget-proot.sh >> wget-proot.sh
-yes | bash wget-proot.sh
+bash wget-proot.sh
 
 # When prompted, input the rootfs link and the distro name:
 # ROOTFS_LINK="https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
