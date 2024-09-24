@@ -10,8 +10,8 @@ Automatized script to install ubuntu on your android device, no root needed.
 - Recomended at least 3GB free on your device
 
 # Installation
-Using ˋcurlˋ
-ˋcurl -O https://github.com/seu-usuario/seu-repositorio/raw/main/install-ubuntu.sh && bash install-ubuntu.shˋ
+Using `curl`
+`curl -O https://github.com/seu-usuario/seu-repositorio/raw/main/install-ubuntu.sh && bash install-ubuntu.sh`
 
-Using ˋwgetˋ
-ˋwget https://github.com/seu-usuario/seu-repositorio/raw/main/install-ubuntu.sh && bash install-ubuntu.shˋ
+Using `wget`
+`wget https://github.com/seu-usuario/seu-repositorio/raw/main/install-ubuntu.sh && bash install-ubuntu.sh`
