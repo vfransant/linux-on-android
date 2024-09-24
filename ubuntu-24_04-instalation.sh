@@ -15,7 +15,7 @@ echo "y" | pkg upgrade -y
 termux-setup-storage
 
 # Download and run the wget-proot.sh script to install the distro
-curl https://raw.githubusercontent.com/23xvx/Termux-Proot-Custom-Installer/main/wget-proot-distro.sh >> wget-proot-distro.sh
+curl https://raw.githubusercontent.com/23xvx/Termux-Proot-Custom-Installer/main/wget-proot.sh >> wget-proot.sh
 yes | bash wget-proot.sh
 
 # When prompted, input the rootfs link and the distro name:
