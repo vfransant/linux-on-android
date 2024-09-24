@@ -26,7 +26,7 @@ bash wget-proot.sh
 {
     echo "$ROOTFS_LINK"
     echo "$DISTRO_NAME"
-} | bash wget-proot.sh
+}
 
 # After this, installation will continue, but there will be errors.
 # Now let's manually fix these errors by editing the ubuntu.sh script.
