@@ -3,6 +3,8 @@
 ROOTFS_LINK="https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
 DISTRO_NAME="ubuntu"
 
+termux-change-repo
+
 # Updating Termux repo
 pkg update
 
