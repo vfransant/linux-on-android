@@ -4,7 +4,7 @@
 pkg update
 
 # Installing updates
-pkg upgrade -y
+echo "y" | pkg upgrade -y
 
 # Setting up Termux access to Android storage (downloads, photos, etc.)
 termux-setup-storage
@@ -13,18 +13,19 @@ termux-setup-storage
 yes | bash wget-proot.sh
 
 # When prompted, input the rootfs link and the distro name:
-echo "https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
-echo "ubuntu"
+ROOTFS_LINK="https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
+DISTRO_NAME="ubuntu"
+
+# Here we are using a here document to feed the input directly
+{
+    echo "$ROOTFS_LINK"
+    echo "$DISTRO_NAME"
+} | bash wget-proot.sh
 
 # After this, installation will continue, but there will be errors.
 # Now let's manually fix these errors by editing the ubuntu.sh script.
 # We will overwrite the content of ubuntu.sh with the correct code:
 
-nano ubuntu.sh
-
-################################################################################
-
-# Replace the content of ubuntu.sh with this:
 cat << 'EOF' > ubuntu.sh
 #!/data/data/com.termux/files/usr/bin/bash
 cd $(dirname $0)
@@ -83,8 +84,6 @@ fi
 exec $command
 EOF
 
-################################################################################
-
 # Run the updated script:
 dash ubuntu.sh
 
@@ -97,9 +96,6 @@ echo "y" | sudo apt install xfce4 xfce4-session xfce4-goodies tigervnc-standalon
 echo -e "linux\nlinux\nn" | vncserver
 
 # Now, edit the VNC startup configuration file:
-nano ~/.vnc/xstartup
-
-# Replace the content of ~/.vnc/xstartup with this:
 cat << 'EOF' > ~/.vnc/xstartup
 #!/bin/sh
 xrdb $HOME/.Xresources
@@ -132,8 +128,6 @@ vncserver
 
 # Now, let's install Firefox-ESR:
 # Script to download and install Firefox-ESR:
-
-#!/bin/bash
 
 # URL to fetch the .deb package of Firefox
 DOWNLOAD_URL=$(wget -q -O - https://packages.debian.org/sid/arm64/firefox-esr/download | grep 'ftp.us' | grep 'esr-1_arm64' | grep -oP '(?<=href=")[^"]*')
