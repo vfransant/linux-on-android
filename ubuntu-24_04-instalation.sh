@@ -1,24 +1,23 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-# Update Termux repository
+# Updating Termux repo
 pkg update
 
-# Upgrade all installed packages
-pkg upgrade -y
+# Installing updates
+echo "y" | pkg upgrade -y
 
-# Set up Termux to access Android storage (downloads, photos, etc.)
+# Setting up Termux access to Android storage (downloads, photos, etc.)
 termux-setup-storage
 
-# Download and run the wget-proot.sh script to install the distribution
-curl -o wget-proot.sh https://raw.githubusercontent.com/23xvx/Termux-Proot-Custom-Installer/main/wget-proot.sh
-bash wget-proot.sh
+# Download and run the wget-proot.sh script to install the distro
+yes | bash wget-proot.sh
 
 # When prompted, input the rootfs link and the distro name:
 echo "https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
 echo "ubuntu"
 
-# After this, installation will continue, but there may be errors.
-# We will manually fix these errors by editing the ubuntu.sh script.
+# After this, installation will continue, but there will be errors.
+# Now let's manually fix these errors by editing the ubuntu.sh script.
 # We will overwrite the content of ubuntu.sh with the correct code:
 
 nano ubuntu.sh
@@ -33,7 +32,7 @@ cd $(dirname $0)
 # Start PulseAudio
 pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"
 
-# Set the login shell for the distribution
+# Set login shell for the distribution
 login_shell=$(grep "^root:" "u-fs/etc/passwd" | cut -d ':' -f 7)
 
 # Unset LD_PRELOAD in case termux-exec is installed
@@ -41,7 +40,7 @@ unset LD_PRELOAD
 
 # Proot configured command
 command="proot"
-# Uncomment the following line if you receive a "FATAL: kernel too old" message.
+# Uncomment the following line if you get "FATAL: kernel too old" message.
 # command="$command -k 4.14.81"
 command="$command --link2symlink"
 command="$command -0"
@@ -63,7 +62,7 @@ command="$command -b /sdcard"
 command="$command -b /mnt"
 command="$command -w /root"
 
-# Conditional to select the login shell
+# Conditional to select login shell
 if [ -n "$login_shell" ]; then
     command="$command /usr/bin/env -i"
     command="$command HOME=/root"
@@ -87,12 +86,12 @@ EOF
 ################################################################################
 
 # Run the updated script:
-bash ubuntu.sh
+dash ubuntu.sh
 
 # Now, update and install XFCE, VNC, and dbus:
-sudo apt update
-sudo apt upgrade -y
-sudo apt install xfce4 xfce4-session xfce4-goodies tigervnc-standalone-server dbus-x11 -y
+echo "y" | sudo apt update
+echo "y" | sudo apt upgrade -y
+echo "y" | sudo apt install xfce4 xfce4-session xfce4-goodies tigervnc-standalone-server dbus-x11 -y
 
 # Set up the VNC password automatically (set to "linux"):
 echo -e "linux\nlinux\nn" | vncserver
@@ -125,7 +124,7 @@ export XDG_RUNTIME_DIR=/tmp/runtime-root
 touch ~/.Xauthority
 
 # Install Xserver as a precaution:
-sudo apt install x11-xserver-utils -y
+echo "y" | sudo apt install x11-xserver-utils -y
 
 # Restart the VNC server to apply changes:
 vncserver -kill :1
@@ -134,7 +133,9 @@ vncserver
 # Now, let's install Firefox-ESR:
 # Script to download and install Firefox-ESR:
 
-# Fetch the .deb package of Firefox
+#!/bin/bash
+
+# URL to fetch the .deb package of Firefox
 DOWNLOAD_URL=$(wget -q -O - https://packages.debian.org/sid/arm64/firefox-esr/download | grep 'ftp.us' | grep 'esr-1_arm64' | grep -oP '(?<=href=")[^"]*')
 
 # Check if the link was found
@@ -153,7 +154,7 @@ sudo dpkg -i ~/Downloads/$(basename "$DOWNLOAD_URL")
 
 # Fix dependencies if needed
 echo "Fixing dependencies..."
-sudo apt-get install -f -y
+echo "y" | sudo apt-get install -f -y
 
 # Add configuration for Firefox in ~/.bashrc
 echo "export MOZ_DISABLE_CONTENT_SANDBOX=1" >> ~/.bashrc
