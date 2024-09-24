@@ -1,15 +1,15 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-# Updating Termux repo
+# Update Termux repository
 pkg update
 
-# Installing updates
-pkg upgrade -y -y
+# Upgrade all installed packages
+pkg upgrade -y
 
-# Setting up Termux access to Android storage (downloads, photos, etc.)
+# Set up Termux to access Android storage (downloads, photos, etc.)
 termux-setup-storage
 
-# Download and run the wget-proot.sh script to install the distro
+# Download and run the wget-proot.sh script to install the distribution
 curl -o wget-proot.sh https://raw.githubusercontent.com/23xvx/Termux-Proot-Custom-Installer/main/wget-proot.sh
 bash wget-proot.sh
 
@@ -17,8 +17,8 @@ bash wget-proot.sh
 echo "https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
 echo "ubuntu"
 
-# After this, installation will continue, but there will be errors.
-# Now let's manually fix these errors by editing the ubuntu.sh script.
+# After this, installation will continue, but there may be errors.
+# We will manually fix these errors by editing the ubuntu.sh script.
 # We will overwrite the content of ubuntu.sh with the correct code:
 
 nano ubuntu.sh
@@ -33,7 +33,7 @@ cd $(dirname $0)
 # Start PulseAudio
 pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"
 
-# Set login shell for the distribution
+# Set the login shell for the distribution
 login_shell=$(grep "^root:" "u-fs/etc/passwd" | cut -d ':' -f 7)
 
 # Unset LD_PRELOAD in case termux-exec is installed
@@ -41,7 +41,7 @@ unset LD_PRELOAD
 
 # Proot configured command
 command="proot"
-# Uncomment the following line if you get "FATAL: kernel too old" message.
+# Uncomment the following line if you receive a "FATAL: kernel too old" message.
 # command="$command -k 4.14.81"
 command="$command --link2symlink"
 command="$command -0"
@@ -63,7 +63,7 @@ command="$command -b /sdcard"
 command="$command -b /mnt"
 command="$command -w /root"
 
-# Conditional to select login shell
+# Conditional to select the login shell
 if [ -n "$login_shell" ]; then
     command="$command /usr/bin/env -i"
     command="$command HOME=/root"
@@ -87,7 +87,7 @@ EOF
 ################################################################################
 
 # Run the updated script:
-dash ubuntu.sh
+bash ubuntu.sh
 
 # Now, update and install XFCE, VNC, and dbus:
 sudo apt update
@@ -134,9 +134,7 @@ vncserver
 # Now, let's install Firefox-ESR:
 # Script to download and install Firefox-ESR:
 
-#!/bin/bash
-
-# URL to fetch the .deb package of Firefox
+# Fetch the .deb package of Firefox
 DOWNLOAD_URL=$(wget -q -O - https://packages.debian.org/sid/arm64/firefox-esr/download | grep 'ftp.us' | grep 'esr-1_arm64' | grep -oP '(?<=href=")[^"]*')
 
 # Check if the link was found
