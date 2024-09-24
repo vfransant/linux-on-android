@@ -1,5 +1,11 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+# Updating Termux repo
+pkg update
+
+# Installing updates
+pkg upgrade
+
 # Setting up Termux access to Android storage (downloads, photos, etc.)
 termux-setup-storage
 
