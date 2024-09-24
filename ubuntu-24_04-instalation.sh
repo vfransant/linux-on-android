@@ -1,5 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+ROOTFS_LINK="https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
+DISTRO_NAME="ubuntu"
+
 # Updating Termux repo
 pkg update
 
@@ -13,8 +16,8 @@ termux-setup-storage
 yes | bash wget-proot.sh
 
 # When prompted, input the rootfs link and the distro name:
-ROOTFS_LINK="https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
-DISTRO_NAME="ubuntu"
+# ROOTFS_LINK="https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
+# DISTRO_NAME="ubuntu"
 
 # Here we are using a here document to feed the input directly
 {
