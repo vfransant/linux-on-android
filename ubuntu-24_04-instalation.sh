@@ -14,17 +14,25 @@ pkg upgrade
 # Setting up Termux access to Android storage (downloads, photos, etc.)
 termux-setup-storage
 
+
+
+
 # Download and run the wget-proot.sh script to install the distro
-curl https://raw.githubusercontent.com/23xvx/Termux-Proot-Custom-Installer/main/wget-proot.sh >> wget-proot.sh
-bash wget-proot.sh
+curl -O https://raw.githubusercontent.com/23xvx/Termux-Proot-Custom-Installer/main/wget-proot.sh
+chmod +x wget-proot.sh
 
 # When prompted, input the rootfs link and the distro name:
 # ROOTFS_LINK="https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
 # DISTRO_NAME="ubuntu"
 
-# Here we are using a here document to feed the input directly
-echo "$ROOTFS_LINK"
-echo "$DISTRO_NAME"
+# Use a here document to feed input to wget-proot.sh
+bash wget-proot.sh <<EOF
+$ROOTFS_LINK
+$DISTRO_NAME
+EOF
+
+
+##############################################################################
 
 # After this, installation will continue, but there will be errors.
 # Now let's manually fix these errors by editing the ubuntu.sh script.
@@ -87,6 +95,8 @@ fi
 # Execute the command
 exec $command
 EOF
+
+###################################################################
 
 # Run the updated script:
 dash ubuntu.sh
