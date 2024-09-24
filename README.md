@@ -1,5 +1,5 @@
 # linux-on-android
-(Still not quite working!) Automatized script to install ubuntu on your android device, no root needed.
+(Still not quite working!) Automatizated script to install ubuntu on your android device, no root needed.
 
 # Other repositories used
 - [proot-distro](https://github.com/termux/proot-distro)
