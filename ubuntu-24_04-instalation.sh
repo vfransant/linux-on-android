@@ -23,10 +23,8 @@ bash wget-proot.sh
 # DISTRO_NAME="ubuntu"
 
 # Here we are using a here document to feed the input directly
-{
-    echo "$ROOTFS_LINK"
-    echo "$DISTRO_NAME"
-}
+echo "$ROOTFS_LINK"
+echo "$DISTRO_NAME"
 
 # After this, installation will continue, but there will be errors.
 # Now let's manually fix these errors by editing the ubuntu.sh script.
