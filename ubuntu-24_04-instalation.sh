@@ -1,8 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+# Define rootfs link and distro name
 ROOTFS_LINK="https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
 DISTRO_NAME="ubuntu"
 
+# Change Termux repo
 termux-change-repo
 
 # Updating Termux repo
@@ -14,30 +16,21 @@ pkg upgrade
 # Setting up Termux access to Android storage (downloads, photos, etc.)
 termux-setup-storage
 
-
-
-
-# Download and run the wget-proot.sh script to install the distro
+# Download and prepare the wget-proot.sh script
 curl -O https://raw.githubusercontent.com/23xvx/Termux-Proot-Custom-Installer/main/wget-proot.sh
 chmod +x wget-proot.sh
 
-# When prompted, input the rootfs link and the distro name:
-# ROOTFS_LINK="https://cloud-images.ubuntu.com/releases/24.04/release-20240911/ubuntu-24.04-server-cloudimg-arm64-root.tar.xz"
-# DISTRO_NAME="ubuntu"
+# Copy the script and apply the necessary modifications using sed
+cp wget-proot.sh wget-proot-modified.sh
+sed -i "s|read URL|URL=${ROOTFS_LINK}|" wget-proot-modified.sh
+sed -i "s|read ds_name|ds_name=${DISTRO_NAME}|" wget-proot-modified.sh
 
-# Use a here document to feed input to wget-proot.sh
-bash wget-proot.sh <<EOF
-$ROOTFS_LINK
-$DISTRO_NAME
-EOF
-
+# Run the modified script with no user interaction
+bash wget-proot-modified.sh
 
 ##############################################################################
 
-# After this, installation will continue, but there will be errors.
-# Now let's manually fix these errors by editing the ubuntu.sh script.
-# We will overwrite the content of ubuntu.sh with the correct code:
-
+# Fix the ubuntu.sh script content
 cat << 'EOF' > ubuntu.sh
 #!/data/data/com.termux/files/usr/bin/bash
 cd $(dirname $0)
@@ -98,18 +91,18 @@ EOF
 
 ###################################################################
 
-# Run the updated script:
+# Run the updated script
 dash ubuntu.sh
 
-# Now, update and install XFCE, VNC, and dbus:
+# Now, update and install XFCE, VNC, and dbus
 echo "y" | sudo apt update
 echo "y" | sudo apt upgrade -y
 echo "y" | sudo apt install xfce4 xfce4-session xfce4-goodies tigervnc-standalone-server dbus-x11 -y
 
-# Set up the VNC password automatically (set to "linux"):
+# Set up the VNC password automatically (set to "linux")
 echo -e "linux\nlinux\nn" | vncserver
 
-# Now, edit the VNC startup configuration file:
+# Now, edit the VNC startup configuration file
 cat << 'EOF' > ~/.vnc/xstartup
 #!/bin/sh
 xrdb $HOME/.Xresources
@@ -117,31 +110,31 @@ dbus-launch --exit-with-session &
 startxfce4
 EOF
 
-# Give execution permission to the file:
+# Give execution permission to the file
 chmod +x ~/.vnc/xstartup
 
-# Export the USER variable and add it to bashrc:
+# Export the USER variable and add it to bashrc
 export USER=root
 echo "export USER=root" >> ~/.bashrc
 
-# Export the DISPLAY variable for VNC:
+# Export the DISPLAY variable for VNC
 export DISPLAY=:1
 
-# Set up the XDG_RUNTIME_DIR:
+# Set up the XDG_RUNTIME_DIR
 export XDG_RUNTIME_DIR=/tmp/runtime-root
 
-# Create the .Xauthority file if it doesn't exist:
+# Create the .Xauthority file if it doesn't exist
 touch ~/.Xauthority
 
-# Install Xserver as a precaution:
+# Install Xserver as a precaution
 echo "y" | sudo apt install x11-xserver-utils -y
 
-# Restart the VNC server to apply changes:
+# Restart the VNC server to apply changes
 vncserver -kill :1
 vncserver
 
-# Now, let's install Firefox-ESR:
-# Script to download and install Firefox-ESR:
+# Now, let's install Firefox-ESR
+# Script to download and install Firefox-ESR
 
 # URL to fetch the .deb package of Firefox
 DOWNLOAD_URL=$(wget -q -O - https://packages.debian.org/sid/arm64/firefox-esr/download | grep 'ftp.us' | grep 'esr-1_arm64' | grep -oP '(?<=href=")[^"]*')
@@ -167,7 +160,7 @@ echo "y" | sudo apt-get install -f -y
 # Add configuration for Firefox in ~/.bashrc
 echo "export MOZ_DISABLE_CONTENT_SANDBOX=1" >> ~/.bashrc
 
-# Reload the new configuration:
+# Reload the new configuration
 source ~/.bashrc
 
-# Firefox should now be installed and configured.
+# Firefox should now be installed and configured
