@@ -34,7 +34,7 @@ bash wget-proot-modified.sh
 ###################################################################
 
 # Execute commands inside the Ubuntu environment
-bash ubuntu.sh "apt update -y && apt upgrade -y && apt install xfce4 xfce4-session xfce4-goodies mesa-utils tigervnc-standalone-server dbus-x11 -y"
+bash ubuntu.sh "apt update -y && apt upgrade -y && apt install xfce4 xfce4-session xfce4-goodies mesa-utils tigervnc-standalone-server neofetch dbus-x11 -y"
 
 # Set up the VNC password automatically (set to "linux")
 bash ubuntu.sh "mkdir -p ~/.vnc && echo -e 'linux\nlinux' | vncpasswd -f > ~/.vnc/passwd && chmod 600 ~/.vnc/passwd"
