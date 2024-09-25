@@ -31,71 +31,10 @@ sed -i "s|read ds_name|ds_name=${DISTRO_NAME}|" wget-proot-modified.sh
 # Run the modified script with no user interaction
 bash wget-proot-modified.sh
 
-##############################################################################
-
-# Fix the ubuntu.sh script content
-cat << 'EOF' > ubuntu.sh
-#!/data/data/com.termux/files/usr/bin/bash
-cd $(dirname $0)
-
-# Start PulseAudio
-pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"
-
-# Set login shell for the distribution
-login_shell=$(grep "^root:" "ubuntu-fs/etc/passwd" | cut -d ':' -f 7)
-
-# Unset LD_PRELOAD in case termux-exec is installed
-unset LD_PRELOAD
-
-# Proot configured command
-command="proot"
-# Uncomment the following line if you get "FATAL: kernel too old" message.
-# command="$command -k 4.14.81"
-command="$command --link2symlink"
-command="$command -0"
-command="$command -b ubuntu-fs"
-command="$command -b /dev"
-command="$command -b /dev/null:/proc/sys/kernel/cap_last_cap"
-command="$command -b /dev/null:/proc/stat"
-command="$command -b /dev/urandom:/dev/random"
-command="$command -b /proc"
-command="$command -b /proc/self/fd:/dev/fd"
-command="$command -b /proc/self/fd/0:/dev/stdin"
-command="$command -b /proc/self/fd/1:/dev/stdout"
-command="$command -b /proc/self/fd/2:/dev/stderr"
-command="$command -b /sys"
-command="$command -b /data/data/com.termux/files/usr/tmp:/tmp"
-command="$command -b ubuntu-fs/tmp:/dev/shm"
-command="$command -b /data/data/com.termux"
-command="$command -b /sdcard"
-command="$command -b /mnt"
-command="$command -w /root"
-
-# Conditional to select login shell
-if [ -n "$login_shell" ]; then
-    command="$command /usr/bin/env -i"
-    command="$command HOME=/root"
-    command="$command PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games"
-    command="$command TERM=xterm-256color"
-    command="$command LANG=C.UTF-8"
-    command="$command $login_shell"
-else
-    command="$command /usr/bin/env -i"
-    command="$command HOME=/root"
-    command="$command PATH=/usr/local/sbin:/usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/games:/usr/local/games"
-    command="$command TERM=xterm-256color"
-    command="$command LANG=C.UTF-8"
-    command="$command /bin/bash"
-fi
-
-# Execute the command
-exec $command
-EOF
-
 ###################################################################
 
 # Run the updated script
-dash ubuntu.sh
+bash ubuntu.sh
 
 # Now, update and install XFCE, VNC, and dbus
 echo "y" | sudo apt update
