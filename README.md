@@ -1,9 +1,7 @@
 # linux-on-android
 Automatizated script to install ubuntu on your android device, no root needed.
 
-Screenshot_20240924_233802_AVNC.jpg
-
-[Screenshot_20240924_233802_AVNC.jpg](https://raw.githubusercontent.com/vfransant/linux-on-android/refs/heads/main/Screenshot_20240924_233802_AVNC.jpg)
+![Screenshot_20240924_233802_AVNC.jpg](https://raw.githubusercontent.com/vfransant/linux-on-android/refs/heads/main/Screenshot_20240924_233802_AVNC.jpg)
 
 # Features
 - Installs Ubuntu 24.04 Arm64
