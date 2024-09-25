@@ -33,76 +33,41 @@ bash wget-proot-modified.sh
 
 ###################################################################
 
-# Run the updated script
-bash ubuntu.sh
+# Remove the line that enters the Ubuntu environment
+# bash ubuntu.sh  # REMOVED
 
-# Now, update and install XFCE, VNC, and dbus
-echo "y" | sudo apt update
-echo "y" | sudo apt upgrade -y
-echo "y" | sudo apt install xfce4 xfce4-session xfce4-goodies tigervnc-standalone-server dbus-x11 -y
+# Replace with commands passed directly to Ubuntu
+bash ubuntu.sh "apt update -y && apt upgrade -y && apt install xfce4 xfce4-session xfce4-goodies tigervnc-standalone-server dbus-x11 -y && echo -e 'linux\nlinux\nn' | vncserver"
 
-# Set up the VNC password automatically (set to "linux")
-echo -e "linux\nlinux\nn" | vncserver
-
-# Now, edit the VNC startup configuration file
-cat << 'EOF' > ~/.vnc/xstartup
+# Edit the VNC startup configuration file inside the Ubuntu environment
+bash ubuntu.sh "cat << 'EOF' > ~/.vnc/xstartup
 #!/bin/sh
-xrdb $HOME/.Xresources
+xrdb \$HOME/.Xresources
 dbus-launch --exit-with-session &
 startxfce4
 EOF
+chmod +x ~/.vnc/xstartup"
 
-# Give execution permission to the file
-chmod +x ~/.vnc/xstartup
-
-# Export the USER variable and add it to bashrc
-export USER=root
-echo "export USER=root" >> ~/.bashrc
-
-# Export the DISPLAY variable for VNC
-export DISPLAY=:1
-
-# Set up the XDG_RUNTIME_DIR
-export XDG_RUNTIME_DIR=/tmp/runtime-root
-
-# Create the .Xauthority file if it doesn't exist
-touch ~/.Xauthority
+# Export environment variables and configure VNC inside Ubuntu
+bash ubuntu.sh "export USER=root && echo 'export USER=root' >> ~/.bashrc && export DISPLAY=:1 && export XDG_RUNTIME_DIR=/tmp/runtime-root && touch ~/.Xauthority"
 
 # Install Xserver as a precaution
-echo "y" | sudo apt install x11-xserver-utils -y
+bash ubuntu.sh "apt install x11-xserver-utils -y"
 
 # Restart the VNC server to apply changes
-vncserver -kill :1
-vncserver
+bash ubuntu.sh "vncserver -kill :1 && vncserver"
 
-# Now, let's install Firefox-ESR
-# Script to download and install Firefox-ESR
-
-# URL to fetch the .deb package of Firefox
-DOWNLOAD_URL=$(wget -q -O - https://packages.debian.org/sid/arm64/firefox-esr/download | grep 'ftp.us' | grep 'esr-1_arm64' | grep -oP '(?<=href=")[^"]*')
-
-# Check if the link was found
-if [ -z "$DOWNLOAD_URL" ]; then
-    echo "Error: file link not found."
+# Download and install Firefox-ESR
+bash ubuntu.sh "
+DOWNLOAD_URL=\$(wget -q -O - https://packages.debian.org/sid/arm64/firefox-esr/download | grep 'ftp.us' | grep 'esr-1_arm64' | grep -oP '(?<=href=\")[^\"*]')
+if [ -z \"\$DOWNLOAD_URL\" ]; then
+    echo 'Error: file link not found.'
     exit 1
 fi
+echo 'Downloading the file: \$DOWNLOAD_URL'
+wget -P ~/Downloads \"\$DOWNLOAD_URL\"
+dpkg -i ~/Downloads/\$(basename \"\$DOWNLOAD_URL\")
+apt-get install -f -y"
 
-# Download the .deb file
-echo "Downloading the file: $DOWNLOAD_URL"
-wget -P ~/Downloads "$DOWNLOAD_URL"
-
-# Install the .deb package
-echo "Installing the package..."
-sudo dpkg -i ~/Downloads/$(basename "$DOWNLOAD_URL")
-
-# Fix dependencies if needed
-echo "Fixing dependencies..."
-echo "y" | sudo apt-get install -f -y
-
-# Add configuration for Firefox in ~/.bashrc
-echo "export MOZ_DISABLE_CONTENT_SANDBOX=1" >> ~/.bashrc
-
-# Reload the new configuration
-source ~/.bashrc
-
-# Firefox should now be installed and configured
+# Add Firefox configuration to .bashrc
+bash ubuntu.sh "echo 'export MOZ_DISABLE_CONTENT_SANDBOX=1' >> ~/.bashrc && source ~/.bashrc"
