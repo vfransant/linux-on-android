@@ -15,6 +15,11 @@ Automatizated script to install ubuntu on your android device, no root needed.
 # Requirements
 - [Termux](https://termux.dev/en/), preferably latest version - and not from Play Store (no more updates from there)
 - The installation takes about 3.2GB of space
+- VNC Viewer app of your choise
+  My suggestion, if you are using a physical keyboard and mouse:
+  - [AVNC](https://play.google.com/store/apps/details?id=com.gaurav.avnc)
+  My suggestion, if relying only on phones touch screen and on-screen keyboard:
+  - [RealVNC Viewer: Remote Desktop](https://play.google.com/store/apps/details?id=com.realvnc.viewer.android)
 
 # Installation
 Using `curl`
