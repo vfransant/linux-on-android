@@ -36,3 +36,5 @@ and it will start a vnc session. Use your VNC Viewer of choice and connect eithe
 - If you want to use it on another device
 your device's IP on your local network, followed by :1
 Example: `192.168.0.15:1`
+
+The default password is `linux`
