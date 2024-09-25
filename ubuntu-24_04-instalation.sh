@@ -10,6 +10,9 @@ termux-change-repo
 # Updating Termux repo
 pkg update
 
+# Install nano
+pkg install nano
+
 # Installing updates
 pkg upgrade
 
