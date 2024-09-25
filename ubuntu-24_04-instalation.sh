@@ -42,7 +42,7 @@ cd $(dirname $0)
 pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"
 
 # Set login shell for the distribution
-login_shell=$(grep "^root:" "u-fs/etc/passwd" | cut -d ':' -f 7)
+login_shell=$(grep "^root:" "ubuntu-fs/etc/passwd" | cut -d ':' -f 7)
 
 # Unset LD_PRELOAD in case termux-exec is installed
 unset LD_PRELOAD
@@ -65,7 +65,7 @@ command="$command -b /proc/self/fd/1:/dev/stdout"
 command="$command -b /proc/self/fd/2:/dev/stderr"
 command="$command -b /sys"
 command="$command -b /data/data/com.termux/files/usr/tmp:/tmp"
-command="$command -b u-fs/tmp:/dev/shm"
+command="$command -b ubuntu-fs/tmp:/dev/shm"
 command="$command -b /data/data/com.termux"
 command="$command -b /sdcard"
 command="$command -b /mnt"
