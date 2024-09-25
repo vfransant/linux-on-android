@@ -33,11 +33,11 @@ bash wget-proot-modified.sh
 
 ###################################################################
 
-# Remove the line that enters the Ubuntu environment
-# bash ubuntu.sh  # REMOVED
+# Execute commands inside the Ubuntu environment
+bash ubuntu.sh "apt update -y && apt upgrade -y && apt install xfce4 xfce4-session xfce4-goodies mesa-utils tigervnc-standalone-server dbus-x11 -y"
 
-# Replace with commands passed directly to Ubuntu
-bash ubuntu.sh "apt update -y && apt upgrade -y && apt install xfce4 xfce4-session xfce4-goodies tigervnc-standalone-server dbus-x11 -y && echo -e 'linux\nlinux\nn' | vncserver"
+# Set up the VNC password automatically (set to "linux")
+bash ubuntu.sh "mkdir -p ~/.vnc && echo -e 'linux\nlinux' | vncpasswd -f > ~/.vnc/passwd && chmod 600 ~/.vnc/passwd"
 
 # Edit the VNC startup configuration file inside the Ubuntu environment
 bash ubuntu.sh "cat << 'EOF' > ~/.vnc/xstartup
@@ -54,20 +54,14 @@ bash ubuntu.sh "export USER=root && echo 'export USER=root' >> ~/.bashrc && expo
 # Install Xserver as a precaution
 bash ubuntu.sh "apt install x11-xserver-utils -y"
 
-# Restart the VNC server to apply changes
+# Restart the VNC server to apply changes and start it for the first time
 bash ubuntu.sh "vncserver -kill :1 && vncserver"
 
-# Download and install Firefox-ESR
+# Download and install Firefox-ESR directly from the Debian FTP
 bash ubuntu.sh "
-DOWNLOAD_URL=\$(wget -q -O - https://packages.debian.org/sid/arm64/firefox-esr/download | grep 'ftp.us' | grep 'esr-1_arm64' | grep -oP '(?<=href=\")[^\"*]')
-if [ -z \"\$DOWNLOAD_URL\" ]; then
-    echo 'Error: file link not found.'
-    exit 1
-fi
-echo 'Downloading the file: \$DOWNLOAD_URL'
+DOWNLOAD_URL='http://ftp.us.debian.org/debian/pool/main/f/firefox-esr/firefox-esr_115.15.0esr-1_arm64.deb'
 wget -P ~/Downloads \"\$DOWNLOAD_URL\"
-dpkg -i ~/Downloads/\$(basename \"\$DOWNLOAD_URL\")
-apt-get install -f -y"
+dpkg -i ~/Downloads/\$(basename \"\$DOWNLOAD_URL\") || apt-get install -f -y"
 
 # Add Firefox configuration to .bashrc
 bash ubuntu.sh "echo 'export MOZ_DISABLE_CONTENT_SANDBOX=1' >> ~/.bashrc && source ~/.bashrc"
